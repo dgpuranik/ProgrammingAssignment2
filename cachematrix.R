@@ -4,19 +4,31 @@
 ## of same unchanged vector you get cached result. 
 ## Intellligent and smart Inverse function!
 
-## This function create special object which cache its inverse.
+## This function create "special Matrix" object which cache its inverse.
+## "special Matrix" is a list of function that allow you to set Matrix,
+## get Matrix, compute inverse of matrix set previously and get cached
+## inverse of matrix.
 
 makeCacheMatrix <- function(x = matrix()) {
   i <- NULL
+  
+  ## setting value of matrix 
   set <- function (y)
   {
     x<<-y
     i<<-NULL
   }
+  
+  ## getting value of matrix
   get <- function() x
+  
+  ## Setting inverse of Matrix 
   setInverse <- function (inverse) i<<-inverse
+  
+  ## getting inverse of matrix
   getInverse <- function () i
   
+  ## returnin special matrix consist of required function
   list(
     set = set,
     get = get,
@@ -32,15 +44,24 @@ makeCacheMatrix <- function(x = matrix()) {
 ## from the cache.
 
 cacheSolve <- function(x, ...) {
-    ## Return a matrix that is the inverse of 'x'
+    
+    ## Trying to get cached inverse 
     i <- x$getInverse()
     if(!is.null(i)) 
     {
       message("getting cached data")
       return(i)
     }
+    
+    ## Getting Matrix provided 
     data <- x$get()
+    
+    ## Computing inverse of Matrix
     i <- solve(data, ...)
+    
+    ## Caching inverse of Matrix
     x$setInverse(i)
+    
+    ## Return a matrix that is the inverse of 'x'
     i
 }
